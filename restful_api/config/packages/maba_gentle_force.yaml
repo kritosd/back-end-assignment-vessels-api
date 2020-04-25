@@ -1,0 +1,30 @@
+maba_gentle_force:
+    redis:
+        host:                 localhost
+        #parameters:           []
+        #options:
+         #   replication:      ~
+         #   service:          ~
+           # parameters:
+            #    password:     ~
+        #service_id:           ~
+        #prefix:               ~
+        #failure_strategy:     fail
+    limits:
+        api_request:
+            # Allow 10 requests each minute.
+            # User can "save up" hour of usage if not using API.
+            # This means up to 610 requests at once, after that -
+            # 10 requests per minute, which could again save-up up to 610.
+        - max_usages: 10
+          period: 1m
+          bucketed_period: 1h
+    listeners:
+        - path: ^/api/          # automatically limit matching requests
+          limits_key: api_request
+          identifiers: [ip]     # limit by IP address
+
+        - path: ^/api
+          limits_key: api_request
+            # additionally limit by username, if available
+          identifiers: [username]
