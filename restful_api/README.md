@@ -2,6 +2,11 @@
 
 
 
+### Requirements
+
+Database: Mysql
+limit Requests: Redis
+
 ### Installing
 
 A step by step to get a development env running
@@ -70,5 +75,16 @@ Bearer MY_TOKEN
 
 ```
 php bin/phpunit tests
+```
+
+  
+### Limit Requests
+
+To enable limit requests go to the file maba_gentle_force.yaml and uncomment this lines
+```
+#        - path: ^\/?api.*$
+#          limits_key: api_request
+#            # additionally limit by username, if available
+#          identifiers: [username]
 ```
 
