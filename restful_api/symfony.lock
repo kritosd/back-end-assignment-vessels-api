@@ -95,6 +95,15 @@
     "fig/link-util": {
         "version": "1.1.0"
     },
+    "guzzlehttp/guzzle": {
+        "version": "6.5.3"
+    },
+    "guzzlehttp/promises": {
+        "version": "v1.3.1"
+    },
+    "guzzlehttp/psr7": {
+        "version": "1.6.1"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -176,11 +185,17 @@
     "psr/event-dispatcher": {
         "version": "1.0.0"
     },
+    "psr/http-message": {
+        "version": "1.0.1"
+    },
     "psr/link": {
         "version": "1.0.0"
     },
     "psr/log": {
         "version": "1.1.3"
+    },
+    "ralouphie/getallheaders": {
+        "version": "3.0.3"
     },
     "symfony/asset": {
         "version": "v5.0.7"
@@ -312,6 +327,21 @@
     },
     "symfony/options-resolver": {
         "version": "v5.0.7"
+    },
+    "symfony/phpunit-bridge": {
+        "version": "4.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.3",
+            "ref": "6d0e35f749d5f4bfe1f011762875275cd3f9874f"
+        },
+        "files": [
+            "./.env.test",
+            "./bin/phpunit",
+            "./phpunit.xml.dist",
+            "./tests/bootstrap.php"
+        ]
     },
     "symfony/polyfill-intl-icu": {
         "version": "v1.15.0"

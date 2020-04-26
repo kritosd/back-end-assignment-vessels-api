@@ -8,6 +8,7 @@
         "api-platform/api-pack": "^1.2",
         "doctrine/annotations": "^1.10",
         "doctrine/doctrine-migrations-bundle": "^2.1",
+        "guzzlehttp/guzzle": "^6.5",
         "league/csv": "^9.6",
         "lexik/jwt-authentication-bundle": "^2.6",
         "maba/gentle-force-bundle": "^0.6.0",
@@ -21,6 +22,7 @@
     },
     "require-dev": {
         "symfony/maker-bundle": "^1.15",
+        "symfony/phpunit-bridge": "^5.0",
         "symfony/web-server-bundle": "^4.4.2"
     },
     "config": {

@@ -41,11 +41,11 @@ class CsvImport extends Command
 
         foreach ($records as $record)
         {
-            $vessel = $this->em->getRepository('App:Vessel')->findOneBy(array('_id' => $record['id']));
+            $vessel = $this->em->find('App:Vessel', $record['id']);
 
             if(empty($vessel)) {
                 $vessel = (new Vessel())
-                    ->set_Id($record['id'])
+                    ->setId($record['id'])
                     ->setCallsign($record['callsign'])
                     ->setLength($record['length'])
                     ->setWidth($record['width'])

@@ -12,28 +12,26 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use App\Uuid;
 
 /**
  * @ApiResource(normalizationContext={"groups"={"vessel"}})
  * @ORM\Entity(repositoryClass="App\Repository\VesselRepository")
- * @ApiFilter(SearchFilter::class, properties={"mmsi": "exact"})
- * @ApiFilter(NumericFilter::class, properties={"length": "exact", "width": "exact"})
- * @ApiFilter(RangeFilter::class, properties={"price"})
+ * @ApiFilter(SearchFilter::class, properties={"mmsi": "exact", "length": "exact", "width": "exact"})
+ * @ApiFilter(NumericFilter::class, properties={"length", "width"})
+ * @ApiFilter(RangeFilter::class, properties={"position.lat", "position.lon"})
  */
 class Vessel
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @Groups({"vessel"})
+     * @ApiProperty(identifier=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"vessel"})
-     */
-    private $_id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -98,7 +96,7 @@ class Vessel
     private $status;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Position", inversedBy="vessels")
+     * @ORM\OneToMany(targetEntity="App\Entity\Position", mappedBy="vessel")
      * @ApiSubresource
      * @Groups({"vessel"})
      */
@@ -109,21 +107,14 @@ class Vessel
         $this->position = new ArrayCollection();
     }
 
-
-
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
 
-    public function get_Id(): ?int
+    public function setId(string $id): self
     {
-        return $this->_id;
-    }
-
-    public function set_Id(string $_id): self
-    {
-        $this->_id = $_id;
+        $this->id = $id;
 
         return $this;
     }
@@ -260,6 +251,7 @@ class Vessel
     {
         if (!$this->position->contains($position)) {
             $this->position[] = $position;
+            $position->setVessel($this);
         }
 
         return $this;
@@ -269,6 +261,10 @@ class Vessel
     {
         if ($this->position->contains($position)) {
             $this->position->removeElement($position);
+            // set the owning side to null (unless already changed)
+            if ($position->getVessel() === $this) {
+                $position->setVessel(null);
+            }
         }
 
         return $this;

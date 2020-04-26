@@ -33,4 +33,9 @@ services:
         tags:
             - { name: console.command }
 
-    snc_redis.default_client: '@snc_redis.default'
+    console_command.create_user:
+            class: App\Command\CreateUser
+            arguments:
+                - "@doctrine.orm.entity_manager"
+            tags:
+                - { name: console.command }

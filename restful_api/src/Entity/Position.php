@@ -7,10 +7,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\PositionRepository")
+ * @ApiFilter(NumericFilter::class, properties={"lat", "lon"})
+ * @ApiFilter(RangeFilter::class, properties={"lat", "lon"})
  */
 class Position
 {
@@ -22,27 +27,24 @@ class Position
      */
     private $id;
 
+    #@ORM\Column(type="string", length=255)
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="decimal", precision=10, scale=8)
      * @Groups({"vessel"})
      */
     private $lat;
 
+    #@ORM\Column(type="string", length=255)
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="decimal", precision=11, scale=8)
      * @Groups({"vessel"})
      */
     private $lon;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Vessel", mappedBy="position")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Vessel", inversedBy="position")
      */
-    private $vessels;
-
-    public function __construct()
-    {
-        $this->vessels = new ArrayCollection();
-    }
+    private $vessel;
 
 
     public function getId(): ?int
@@ -74,30 +76,14 @@ class Position
         return $this;
     }
 
-    /**
-     * @return Collection|Vessel[]
-     */
-    public function getVessels(): Collection
+    public function getVessel(): ?Vessel
     {
-        return $this->vessels;
+        return $this->vessel;
     }
 
-    public function addVessel(Vessel $vessel): self
+    public function setVessel(?Vessel $vessel): self
     {
-        if (!$this->vessels->contains($vessel)) {
-            $this->vessels[] = $vessel;
-            $vessel->addPosition($this);
-        }
-
-        return $this;
-    }
-
-    public function removeVessel(Vessel $vessel): self
-    {
-        if ($this->vessels->contains($vessel)) {
-            $this->vessels->removeElement($vessel);
-            $vessel->removePosition($this);
-        }
+        $this->vessel = $vessel;
 
         return $this;
     }
