@@ -6,6 +6,12 @@
 
 A step by step to get a development env running
 
+Go to the project
+
+```
+cd restful_api
+```
+
 Install packages
 
 ```
@@ -38,6 +44,8 @@ php bin/console server:run
 
 
 ### Usage
+
+Application run on default http://localhost:8000
 
 first of all we need to get authentication token.
 

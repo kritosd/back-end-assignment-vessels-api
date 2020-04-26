@@ -35,16 +35,22 @@ class CreateUser extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        $io->title('Attempting to create user...');
+        $io->title('Attempting to create 2 users...');
 
         $user = new User();
         $user->setPassword($this->passwordEncoder->encodePassword($user,'testtest'));
         $user->setEmail('test@test.com');
 
         $this->em->persist($user);
+
+        $user2 = new User();
+        $user2->setPassword($this->passwordEncoder->encodePassword($user2,'adminadmin'));
+        $user2->setEmail('admin@admin.com');
+
+        $this->em->persist($user2);
         $this->em->flush();
 
-        $io->success('User created successfully!!');
+        $io->success('Users created successfully!!');
 
         return 0;
     }
